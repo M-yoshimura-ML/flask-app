@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New</title>
+</head>
+<body>
+    <h2>Register new Student</h2>
+    <h3>Student information</h3>
+    <form action="{{ request.path }}" method="POST">
+        <p>name</p>
+        <input type="text" name="name" />
+        <p>address</p>
+        <textarea name="address"></textarea>
+        <p>city</p>
+        <input type="text" name="city" />
+        <p>pin number</p>
+        <input type="text" name="pin" />
+        <br>
+        <input type="submit" value="submit" />
+    </form>
+</body>
+</html>

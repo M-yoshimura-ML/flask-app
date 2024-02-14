@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Show All</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <td>name</td>
+            <td>address</td>
+            <td>city</td>
+            <td>pin number</td>
+        </thead>
+        {% for student in students %}
+            <tr>
+                <td>{{ student.name }}</td>
+                <td>{{ student.address }}</td>
+                <td>{{ student.city }}</td>
+                <td>{{ student.pin }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <p><a href="/new">Add new Student</a></p>
+</body>
+</html>

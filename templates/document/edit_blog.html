@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Create New Blog</h1>
+    <p><a href="/document">Go back to blog list</a></p>
+    <form action="/update/{{ post.id }}" method="POST">
+        <p>title</p>
+        <input type="text" name="title" value="{{ post.title }}" />
+        <p>content</p>
+        <input type="text" name="content" value="{{ post.body }}" />
+        <br>
+        <input type="submit" value="update" />
+    </form>
+{% endblock %}

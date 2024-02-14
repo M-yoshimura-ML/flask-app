@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>blog page</h1>
+    <p><a href="/create_blog">Create new blog</a></p>
+    <p><a href="/logout">Logout</a></p>
+
+    {% for post in posts %}
+        <article>
+            <h2>{{ post.title }}</h2>
+            <a href="/update/{{post.id}}">Edit blog</a>
+            <a href="/delete/{{post.id}}">Delete blog</a>
+            <p>created at: {{ post.created_at }}</p>
+            <p>{{ post.body }}</p>
+        </article>
+    {% endfor %}
+{% endblock %}

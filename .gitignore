@@ -1,0 +1,4 @@
+*.png
+*.db
+venv
+instance/*.db

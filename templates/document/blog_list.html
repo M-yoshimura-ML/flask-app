@@ -1,17 +1,19 @@
-{% extends "base.html" %}
+{% extends "bootstrap/base.html" %}
+{% block title %}Blog list page{% endblock %}
 {% block content %}
-    <h1>blog page</h1>
+<div class="container">
+    <h1 class="mt-5">blog page</h1>
     <p><a href="/create_blog">Create new blog</a></p>
     <p><a href="/logout">Logout</a></p>
 
     {% for post in posts.items %}
-        <article>
+        <ul class="list-group">
             <h2>{{ post.title }}</h2>
-            <a href="/update/{{post.id}}">Edit blog</a>
-            <a href="/delete/{{post.id}}">Delete blog</a>
-            <p>created at: {{ post.created_at }}</p>
-            <p>{{ post.body }}</p>
-        </article>
+            <a href="/update/{{post.id}}">Edit</a>
+            <a href="/delete/{{post.id}}">Delete</a>
+            <li class="list-group-item">created at: {{ post.created_at }}</li>
+            <li class="list-group-item"><p>{{ post.body }}</p></li>
+        </ul>
     {% endfor %}
     {% if posts.has_prev %}
         <a href="{{ url_for('Blog.display_document', page=posts.prev_num) }}">Previous</a>
@@ -19,4 +21,5 @@
     {% if posts.has_next %}
         <a href="{{ url_for('Blog.display_document', page=posts.next_num) }}">Next</a>
     {% endif %}
+</div>
 {% endblock %}

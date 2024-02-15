@@ -4,7 +4,7 @@
     <p><a href="/create_blog">Create new blog</a></p>
     <p><a href="/logout">Logout</a></p>
 
-    {% for post in posts %}
+    {% for post in posts.items %}
         <article>
             <h2>{{ post.title }}</h2>
             <a href="/update/{{post.id}}">Edit blog</a>
@@ -13,4 +13,10 @@
             <p>{{ post.body }}</p>
         </article>
     {% endfor %}
+    {% if posts.has_prev %}
+        <a href="{{ url_for('Blog.display_document', page=posts.prev_num) }}">Previous</a>
+    {% endif %}
+    {% if posts.has_next %}
+        <a href="{{ url_for('Blog.display_document', page=posts.next_num) }}">Next</a>
+    {% endif %}
 {% endblock %}

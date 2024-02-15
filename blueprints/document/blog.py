@@ -9,7 +9,10 @@ blog_bp = Blueprint('Blog', __name__, template_folder="templates")
 @blog_bp.route('/document')
 @login_required
 def display_document():
-    return render_template("document/blog_list.html", posts=Post.query.all())
+    page = request.args.get('page', 1, type=int)
+    per_page = 5
+    posts = Post.query.paginate(page=page, per_page=per_page, error_out=False)
+    return render_template("document/blog_list.html", posts=posts)
 
 
 @blog_bp.route('/create_blog', methods=['POST', 'GET'])

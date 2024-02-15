@@ -4,11 +4,13 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
+from flask_mail import Mail
 
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 bootstrap = Bootstrap()
+mail = Mail()
 
 
 def create_app():
@@ -18,6 +20,7 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
     bootstrap.init_app(app)
+    mail.init_app(app)
     with app.app_context():
         db.create_all()
     return app

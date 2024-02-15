@@ -13,6 +13,7 @@ def display_document():
 
 
 @blog_bp.route('/create_blog', methods=['POST', 'GET'])
+@login_required
 def display_create():
     if request.method == "POST":
         if not request.form['title'] or not request.form['content']:
@@ -29,6 +30,7 @@ def display_create():
 
 
 @blog_bp.route("/update/<int:id>", methods=['GET', 'POST'])
+@login_required
 def update_blog(id):
     post = Post.query.get(id)
     if request.method == "GET":
@@ -46,6 +48,7 @@ def update_blog(id):
 
 
 @blog_bp.route("/delete/<int:id>", methods=['GET'])
+@login_required
 def delete_blog(id):
     post = Post.query.get(id)
     db.session.delete(post)

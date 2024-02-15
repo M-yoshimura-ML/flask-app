@@ -1,4 +1,5 @@
 from flask_mail import Mail, Message
+
 from blueprints.helloworld.helloworld import hello_world_bp
 from blueprints.student.formdata import student_bp
 from blueprints.cookies.cookies import cookies_bp

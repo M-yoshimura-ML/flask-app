@@ -1,13 +1,16 @@
-{% extends "base.html" %}
+{% extends "bootstrap/base.html" %}
+{% block title %}Edit blog{% endblock %}
 {% block content %}
-    <h1>Create New Blog</h1>
+<div class="container">
+    <h1>Edit Blog</h1>
     <p><a href="/document">Go back to blog list</a></p>
     <form action="/update/{{ post.id }}" method="POST">
-        <p>title</p>
-        <input type="text" name="title" value="{{ post.title }}" />
-        <p>content</p>
-        <input type="text" name="content" value="{{ post.body }}" />
+        <label class="form-label">title</label>
+        <input type="text" name="title" value="{{ post.title }}" class="form-control" />
+        <label class="form-label">content</label>
+        <textarea type="text" name="content" class="form-control" >{{ post.body }}</textarea>
         <br>
-        <input type="submit" value="update" />
+        <input type="submit" value="update" class="btn btn-primary" />
     </form>
+</div>
 {% endblock %}

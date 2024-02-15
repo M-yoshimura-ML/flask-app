@@ -10,7 +10,7 @@ blog_bp = Blueprint('Blog', __name__, template_folder="templates")
 @login_required
 def display_document():
     page = request.args.get('page', 1, type=int)
-    per_page = 5
+    per_page = 3
     posts = Post.query.paginate(page=page, per_page=per_page, error_out=False)
     return render_template("document/blog_list.html", posts=posts)
 

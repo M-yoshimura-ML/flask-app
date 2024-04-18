@@ -41,21 +41,29 @@ for img_tag in img_tags:
 
 
 def download_image(url, file_path):
-  r = requests.get(url, stream=True)
+  try:
+    r = requests.get(url, stream=True)
 
-  if r.status_code == 200:
-    with open(file_path, "wb") as f:
-      f.write(r.content)
+    if r.status_code == 200:
+      with open(file_path, "wb") as f:
+        f.write(r.content)
+
+  except requests.exceptions.RequestException as e:
+    print('Error downloading image:', e)
+    print('URL:', url)
 
 
 import base64
 
 def save_base64_image(data, file_path):
   """base64の読み込みは4文字ごとに行う。4文字で区切れない部分は「=」で補う"""
-  data = data + '=' * (-len(data) % 4)
-  img = base64.b64decode(data.encode())
-  with open(file_path, "wb") as f:
-      f.write(img)
+  try:
+    data = data + '=' * (-len(data) % 4)
+    img = base64.b64decode(data.encode())
+    with open(file_path, "wb") as f:
+        f.write(img)
+  except :
+    print('Error Downloading image')
 
 
 import os

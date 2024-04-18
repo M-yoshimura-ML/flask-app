@@ -15,7 +15,7 @@ def hello_admin():
 
 @hello_world_bp.route('/hello/<guest>')
 def hello_guest(guest):
-    return 'Hello %s as Guest' % guest
+    return render_template("user/user.html", user_name=guest)
 
 
 @hello_world_bp.route('/user/<name>')

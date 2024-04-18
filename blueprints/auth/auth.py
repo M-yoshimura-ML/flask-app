@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect
+from flask import Blueprint, request, render_template, redirect, session
 from passlib.hash import sha256_crypt
 from flask_login import login_user, login_required, logout_user
 from main import db, login_manager
@@ -6,6 +6,11 @@ from models.users import User
 
 
 auth_bp = Blueprint('Auth', __name__, template_folder="templates")
+
+
+@auth_bp.route('/')
+def top():
+    return redirect('/document')
 
 
 @auth_bp.route('/signup', methods=['POST', 'GET'])
@@ -32,9 +37,12 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if sha256_crypt.verify(password, user.password):
+            session['email'] = email
             login_user(user)
             return redirect('/document')
     else:
+        if 'email' in session:
+            return redirect('/document')
         return render_template('auth/login.html')
 
 
@@ -42,6 +50,7 @@ def login():
 @login_required
 def logout():
     logout_user()
+    session.pop('email', None)
     return redirect('/login')
 
 

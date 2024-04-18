@@ -1,0 +1,43 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Image Search</h1>
+        <form action="/search" method="GET">
+            <div class="input-group d-flex mb-3">
+                <span class="input-group-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                </span>
+                <input type="text" class="form-control" id="query" name="query" style="width: 70%;">
+                <select class="form-control" id="language" name="language" style="width: 20%;">
+                    <option value="en">English</option>
+                    <option value="ja">Japanese</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        {% if search_results %}
+            <form id="downloadForm" action="/download-images" method="POST" style="display: none;">
+                <button type="submit" class="btn btn-success mt-3">Download Images</button>
+            </form>
+            <div class="row mt-5">
+                {% for image_url in search_results %}
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <img src="{{ image_url }}" class="img-fluid" alt="Image">
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

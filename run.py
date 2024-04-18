@@ -9,6 +9,7 @@ from blueprints.sqlite3.sqlite3 import sqlite3_db
 from blueprints.sqlalchemy.sqlalchemy import sqlalchemy_bp
 from blueprints.document.blog import blog_bp
 from blueprints.auth.auth import auth_bp
+from blueprints.searchImage.search import search_image_bp
 from main import create_app
 
 app = create_app()
@@ -24,6 +25,7 @@ app.register_blueprint(sqlite3_db, url_prefix="/student")
 app.register_blueprint(sqlalchemy_bp)
 app.register_blueprint(blog_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(search_image_bp)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587

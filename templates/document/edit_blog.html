@@ -1,8 +1,8 @@
-{% extends "bootstrap/base.html" %}
+{% extends "base.html" %}
 {% block title %}Edit blog{% endblock %}
 {% block content %}
 <div class="container">
-    <h1>Edit Blog</h1>
+    <h1 class="mt-1">Edit Blog</h1>
     <p><a href="/document">Go back to blog list</a></p>
     <form action="/update/{{ post.id }}" method="POST">
         <label class="form-label">title</label>

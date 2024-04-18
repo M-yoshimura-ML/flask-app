@@ -1,3 +1,4 @@
+from flask import render_template
 from blueprints.helloworld.helloworld import hello_world_bp
 from blueprints.student.formdata import student_bp
 from blueprints.cookies.cookies import cookies_bp
@@ -33,6 +34,18 @@ app.config['MAIL_USER'] = 'your_email@gmail.com'    # Your Gmail address
 app.config['MAIL_PASSWORD'] = 'your_app_password'   # Generated app password
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
+app.config['SECRET_KEY'] = 'my secret key'
+
+
+# Invalid URL
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("errors/404.html"), 404
+
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template("errors/500.html"), 500
 
 
 if __name__ == "__main__":

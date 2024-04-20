@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<body>
+    <h1>user list</h1>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form method="POST" action="/user/add">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-5" style="font-size:20px; font-weight:bold; margin-left:10px;">
+            <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+                {{ form.username.label(class="form-label") }}<br>
+                {{ form.username(class="form-control") }}<br>
+
+                {{ form.email.label(class="form-label") }}<br>
+                {{ form.email(class="form-control") }}<br>
+
+                {{ form.password.label(class="form-label") }}<br>
+                {{ form.password(class="form-control") }}<br>
+
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </div>
+    </form>
+    <br>
+    <table class="table table-hover table-bordered table-striped">
+
+        {% for our_user in our_users %}
+            <tr>
+                <td>
+                    {{ our_user.id }}.{{ our_user.username }} - {{ our_user.email }} - {{ our_user.created_at }}
+                </td>
+            </tr>
+        {% endfor%}
+
+    </table>
+</body>
+{% endblock %}

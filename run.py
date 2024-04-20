@@ -34,7 +34,6 @@ app.config['MAIL_USER'] = 'your_email@gmail.com'    # Your Gmail address
 app.config['MAIL_PASSWORD'] = 'your_app_password'   # Generated app password
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['SECRET_KEY'] = 'my secret key'
 
 
 # Invalid URL

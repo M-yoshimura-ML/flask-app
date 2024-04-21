@@ -26,6 +26,9 @@
                 {{ form.password.label(class="form-label") }}<br>
                 {{ form.password(class="form-control") }}<br>
 
+                {{ form.password2.label(class="form-label") }}<br>
+                {{ form.password2(class="form-control") }}<br>
+
                 {{ form.favorite_color.label(class="form-label") }}<br>
                 {{ form.favorite_color(class="form-control") }}<br>
 
@@ -45,6 +48,7 @@
                     </a>
                     - {{ our_user.email }} - {{ our_user.created_at }}
                     - {{ our_user.favorite_color }}
+                    - <a href="{{ url_for('Auth.user_delete', id=our_user.id) }}">Delete</a>
                 </td>
             </tr>
         {% endfor%}

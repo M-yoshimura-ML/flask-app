@@ -8,8 +8,8 @@ from main import db
 blog_bp = Blueprint('Blog', __name__, template_folder="templates")
 
 
-@blog_bp.route('/document')
-def display_document():
+@blog_bp.route('/blog-list')
+def get_blog_list():
     page = request.args.get('page', 1, type=int)
     per_page = 3
     posts = Post.query.paginate(page=page, per_page=per_page, error_out=False)
@@ -55,7 +55,7 @@ def update_blog(id):
 
             db.session.commit()
 
-            return redirect(url_for('Blog.display_document'))
+            return redirect(url_for('Blog.get_blog_list'))
 
 
 @blog_bp.route("/delete/<int:id>", methods=['GET'])
@@ -64,4 +64,4 @@ def delete_blog(id):
     post = Post.query.get(id)
     db.session.delete(post)
     db.session.commit()
-    return redirect(url_for('Blog.display_document'))
+    return redirect(url_for('Blog.get_blog_list'))

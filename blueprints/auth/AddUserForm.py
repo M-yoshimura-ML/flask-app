@@ -8,4 +8,5 @@ class AddUserForm(FlaskForm):
     email = StringField("Email", [validators.DataRequired("Please enter email address"),
                                   validators.Email("Please enter proper email address ")])
     password = StringField("Password", [validators.DataRequired("Please enter password")])
+    favorite_color = StringField("Favorite Color")
     submit = SubmitField("Send")

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <body>
-    <h1>user list</h1>
+    <h1>Update User</h1>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
@@ -12,43 +12,23 @@
         {% endfor %}
     {% endif %}
     {% endwith %}
-    <form method="POST" action="/user/add">
+    <form method="POST" action="/user/update/{{ name_to_update.id }}">
         {{ form.hidden_tag() }}
 
         <div class="mb-5" style="font-size:20px; font-weight:bold; margin-left:10px;">
             <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
                 {{ form.username.label(class="form-label") }}<br>
-                {{ form.username(class="form-control") }}<br>
+                {{ form.username(class="form-control", value=name_to_update.username) }}<br>
 
                 {{ form.email.label(class="form-label") }}<br>
-                {{ form.email(class="form-control") }}<br>
-
-                {{ form.password.label(class="form-label") }}<br>
-                {{ form.password(class="form-control") }}<br>
+                {{ form.email(class="form-control", value=name_to_update.email) }}<br>
 
                 {{ form.favorite_color.label(class="form-label") }}<br>
-                {{ form.favorite_color(class="form-control") }}<br>
+                {{ form.favorite_color(class="form-control", value=name_to_update.favorite_color) }}<br>
 
                 {{ form.submit(class="btn btn-primary") }}
             </div>
         </div>
     </form>
-    <br>
-    <table class="table table-hover table-bordered table-striped">
-
-        {% for our_user in our_users %}
-            <tr>
-                <td>
-                    {{ our_user.id }}.
-                    <a href="{{ url_for('Auth.user_update', id=our_user.id) }}">
-                        {{ our_user.username }}
-                    </a>
-                    - {{ our_user.email }} - {{ our_user.created_at }}
-                    - {{ our_user.favorite_color }}
-                </td>
-            </tr>
-        {% endfor%}
-
-    </table>
 </body>
 {% endblock %}

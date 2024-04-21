@@ -11,7 +11,13 @@ auth_bp = Blueprint('Auth', __name__, template_folder="templates")
 
 @auth_bp.route('/')
 def top():
-    return redirect('/document')
+    return redirect('/dashboard')
+
+
+@auth_bp.route('/dashboard')
+@login_required
+def dashboard():
+    return render_template('dashboard.html')
 
 
 @auth_bp.route('/signup', methods=['POST', 'GET'])
@@ -41,13 +47,13 @@ def login():
         if user and user.verify_password(password):
             session['email'] = email
             login_user(user)
-            return redirect('/document')
+            return redirect('/dashboard')
         else:
             flash("email or password is wrong.")
         return render_template('auth/login.html', form=form)
     else:
         if 'email' in session:
-            return redirect('/document')
+            return redirect('/dashboard')
         return render_template('auth/login.html', form=form)
 
 

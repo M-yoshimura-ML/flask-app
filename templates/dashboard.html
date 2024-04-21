@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>Dashboard</h1>
+    <div class="card">
+      <h5 class="card-header">{{ current_user.username}}</h5>
+      <div class="card-body">
+        <h5 class="card-title">Welcome to Your dashboard</h5>
+        <p><b>Username:{{ current_user.username}}</b></p>
+        <p><b>Email:{{ current_user.email}}</b></p>
+        <p><b>Favorite Color:{{ current_user.favorite_color}}</b></p>
+        <p><b>Created at:{{ current_user.created_at}}</b></p>
+        <a href="#" class="btn btn-secondary btn-sm">Logout</a>
+      </div>
+    </div>
+</div>
+{% endblock %}

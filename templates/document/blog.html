@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Blog list page{% endblock %}
+{% block content %}
+<h1 class="mt-1">blog page</h1>
+
+    <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+        <ul class="list-group">
+            <h2>{{ post.title }}</h2>
+            <small>By: {{ post.author }}</small>
+            <li class="list-group-item">created at: {{ post.created_at }}</li>
+            <li class="list-group-item"><p>{{ post.body }}</p></li>
+        </ul>
+        <a href="{{ url_for('Blog.get_blog_list')}}"
+           class="btn btn-outline-secondary btn-sm mt-1"
+        >Go back to Blog List</a>
+    </div>
+
+{% endblock %}

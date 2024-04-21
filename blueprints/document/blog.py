@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required
 
@@ -14,6 +16,12 @@ def get_blog_list():
     per_page = 3
     posts = Post.query.paginate(page=page, per_page=per_page, error_out=False)
     return render_template("document/blog_list.html", posts=posts)
+
+
+@blog_bp.route('/post/<int:id>')
+def get_blog(id):
+    post = Post.query.get_or_404(id)
+    return render_template("document/blog.html", post=post)
 
 
 @blog_bp.route('/create_blog', methods=['POST', 'GET'])
@@ -43,25 +51,35 @@ def display_create():
 @blog_bp.route("/update/<int:id>", methods=['GET', 'POST'])
 @login_required
 def update_blog(id):
-    post = Post.query.get(id)
-    if request.method == "GET":
-        return render_template('document/edit_blog.html', post=post)
-    if request.method == "POST":
-        if not request.form['title'] or not request.form['content']:
-            flash("Please enter all the fields", 'error')
-        else:
-            post.title = request.form.get('title')
-            post.body = request.form.get('content')
-
-            db.session.commit()
-
-            return redirect(url_for('Blog.get_blog_list'))
+    post = Post.query.get_or_404(id)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.author = form.author.data
+        post.slug = form.slug.data
+        post.body = form.body.data
+        post.updated_at = datetime.datetime.now()
+        db.session.add(post)
+        db.session.commit()
+        flash("Post has been updated")
+        return redirect(url_for('Blog.update_blog', id=post.id))
+    form.title.data = post.title
+    form.author.data = post.author
+    form.slug.data = post.slug
+    form.body.data = post.body
+    return render_template('document/edit_blog.html', id=post.id, form=form)
 
 
 @blog_bp.route("/delete/<int:id>", methods=['GET'])
 @login_required
 def delete_blog(id):
-    post = Post.query.get(id)
-    db.session.delete(post)
-    db.session.commit()
-    return redirect(url_for('Blog.get_blog_list'))
+    post = Post.query.get_or_404(id)
+    try:
+        db.session.delete(post)
+        db.session.commit()
+        flash("Blog post was deleted")
+        return redirect(url_for('Blog.get_blog_list'))
+    except:
+        flash("Whoops there is something wrong for deleting blog.")
+        return redirect(url_for('Blog.get_blog_list'))
+

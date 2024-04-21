@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required
+
+from blueprints.document.post_form import PostForm
 from models.post import Post
 from main import db
 
@@ -7,7 +9,6 @@ blog_bp = Blueprint('Blog', __name__, template_folder="templates")
 
 
 @blog_bp.route('/document')
-@login_required
 def display_document():
     page = request.args.get('page', 1, type=int)
     per_page = 3
@@ -18,18 +19,25 @@ def display_document():
 @blog_bp.route('/create_blog', methods=['POST', 'GET'])
 @login_required
 def display_create():
+    form = PostForm()
     if request.method == "POST":
-        if not request.form['title'] or not request.form['content']:
-            flash("Please enter all the fields", 'error')
-        else:
-            title = request.form.get('title')
-            content = request.form.get('content')
-            post = Post(title=title, body=content)
+        if form.validate_on_submit():
+            title = form.title.data
+            content = form.body.data
+            author = form.author.data
+            slug = form.slug.data
+            post = Post(title=title, body=content, author=author, slug=slug)
+            form.title.data = ''
+            form.body.data = ''
+            form.author.data = ''
+            form.slug.data = ''
             db.session.add(post)
             db.session.commit()
 
-            return redirect(url_for('Blog.display_document'))
-    return render_template('document/create_blog.html', posts=Post.query.all())
+            flash("Blog Post submitted successfully.")
+        return render_template('document/create_blog.html', form=form)
+    else:
+        return render_template('document/create_blog.html', form=form)
 
 
 @blog_bp.route("/update/<int:id>", methods=['GET', 'POST'])

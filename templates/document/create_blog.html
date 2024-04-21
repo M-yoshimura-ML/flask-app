@@ -4,13 +4,33 @@
 <div class="container">
     <h1 class="mt-1">Create New Blog</h1>
     <p><a href="/document">Go back to blog list</a></p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
     <form action="/create_blog" method="POST">
-        <label class="form-label">title</label>
-        <input type="text" name="title" class="form-control" />
-        <label class="form-label">content</label>
-        <textarea type="text" name="content" class="form-control" ></textarea>
-        <br>
-        <input type="submit" value="submit" class="btn btn-primary" />
+        {{ form.hidden_tag() }}
+        <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+        {{ form.title.label(class="form-label") }}<br>
+        {{ form.title(class="form-control") }}<br>
+
+        {{ form.author.label(class="form-label") }}<br>
+        {{ form.author(class="form-control") }}<br>
+
+        {{ form.slug.label(class="form-label") }}<br>
+        {{ form.slug(class="form-control") }}<br>
+
+        {{ form.body.label(class="form-label") }}<br>
+        {{ form.body(class="form-control", rows="10") }}<br>
+
+        {{ form.submit(class="btn btn-primary") }}
+        </div>
     </form>
 </div>
 {% endblock %}

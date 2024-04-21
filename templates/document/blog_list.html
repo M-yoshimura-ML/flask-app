@@ -6,6 +6,7 @@
     <p><a href="/create_blog">Create new blog</a></p>
 
     {% for post in posts.items %}
+    <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
         <ul class="list-group">
             <h2>{{ post.title }}</h2>
             <a href="/update/{{post.id}}">Edit</a>
@@ -13,6 +14,7 @@
             <li class="list-group-item">created at: {{ post.created_at }}</li>
             <li class="list-group-item"><p>{{ post.body }}</p></li>
         </ul>
+    </div>
     {% endfor %}
     {% if posts.has_prev %}
         <a href="{{ url_for('Blog.display_document', page=posts.prev_num) }}">Previous</a>

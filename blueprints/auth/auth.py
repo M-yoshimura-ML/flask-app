@@ -1,9 +1,10 @@
 from flask import Blueprint, request, render_template, redirect, session, flash
 from passlib.hash import sha256_crypt
 from flask_login import login_user, login_required, logout_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from main import db, login_manager
 from models.users import User
-from blueprints.auth.AddUserForm import AddUserForm
+from blueprints.auth.AddUserForm import AddUserForm, LoginForm
 
 auth_bp = Blueprint('Auth', __name__, template_folder="templates")
 
@@ -19,9 +20,10 @@ def signup():
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
-        hashed_pw = sha256_crypt.hash(password)
+        # hashed_pw = sha256_crypt.hash(password)
+        hashed_pw = generate_password_hash(password)
 
-        user = User(username=username, email=email, password=hashed_pw)
+        user = User(username=username, email=email, password_hash=hashed_pw)
 
         db.session.add(user)
         db.session.commit()
@@ -31,19 +33,22 @@ def signup():
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm()
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-
         user = User.query.filter_by(email=email).first()
-        if sha256_crypt.verify(password, user.password):
+        if user and user.verify_password(password):
             session['email'] = email
             login_user(user)
             return redirect('/document')
+        else:
+            flash("email or password is wrong.")
+        return render_template('auth/login.html', form=form)
     else:
         if 'email' in session:
             return redirect('/document')
-        return render_template('auth/login.html')
+        return render_template('auth/login.html', form=form)
 
 
 @auth_bp.route('/user/add', methods=['GET', 'POST'])
@@ -58,9 +63,12 @@ def add_user():
             user = User.query.filter_by(email=email).first()
             if user is None:
                 password = request.form.get('password')
-                hashed_pw = sha256_crypt.hash(password)
+                hashed_pw = generate_password_hash(password)
                 favorite_color = request.form.get('favorite_color')
-                user = User(username=username, email=email, password=hashed_pw, favorite_color=favorite_color)
+                user = User(username=username,
+                            email=email,
+                            password_hash=hashed_pw,
+                            favorite_color=favorite_color)
                 db.session.add(user)
                 db.session.commit()
             form.username.data = ''
@@ -92,7 +100,22 @@ def user_update(id):
             flash('Error Looks like there was a problem')
             return render_template('auth/update.html', form=form, name_to_update=name_to_update)
     else:
-        return render_template('auth/update.html', form=form, name_to_update=name_to_update)
+        return render_template('auth/update.html', form=form, name_to_update=name_to_update, id=id)
+
+
+@auth_bp.route('/user/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def user_delete(id):
+    form = AddUserForm()
+    user_to_delete = User.query.get_or_404(id)
+    try:
+        db.session.delete(user_to_delete)
+        db.session.commit()
+        flash("User deleted successfully")
+        return render_template('auth/add_user.html', form=form, user_to_delete=user_to_delete)
+    except:
+        flash("Whoops! There was a problem to delete user.")
+        return render_template('auth/add_user.html', form=form, user_to_delete=user_to_delete)
 
 
 @auth_bp.route('/logout')

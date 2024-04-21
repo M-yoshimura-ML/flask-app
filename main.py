@@ -2,12 +2,14 @@ import os
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 
 
 db = SQLAlchemy()
+migrate = Migrate()
 login_manager = LoginManager()
 bootstrap = Bootstrap()
 mail = Mail()
@@ -20,6 +22,9 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:password!admin@localhost:3360/flask_app'
     app.config['SECRET_KEY'] = os.urandom(24)
     db.init_app(app)
+    # migrate = Migrate(app, db)
+    migrate.init_app(app, db)
+
     login_manager.init_app(app)
     bootstrap.init_app(app)
     mail.init_app(app)

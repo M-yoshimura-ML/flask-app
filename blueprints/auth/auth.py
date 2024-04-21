@@ -5,7 +5,6 @@ from main import db, login_manager
 from models.users import User
 from blueprints.auth.AddUserForm import AddUserForm
 
-
 auth_bp = Blueprint('Auth', __name__, template_folder="templates")
 
 
@@ -60,7 +59,8 @@ def add_user():
             if user is None:
                 password = request.form.get('password')
                 hashed_pw = sha256_crypt.hash(password)
-                user = User(username=username, email=email, password=hashed_pw)
+                favorite_color = request.form.get('favorite_color')
+                user = User(username=username, email=email, password=hashed_pw, favorite_color=favorite_color)
                 db.session.add(user)
                 db.session.commit()
             form.username.data = ''
@@ -73,6 +73,26 @@ def add_user():
         username = form.username.data
         our_users = User.query.order_by(User.created_at)
         return render_template('auth/add_user.html', form=form, username=username, our_users=our_users)
+
+
+@auth_bp.route('/user/update/<int:id>', methods=['GET', 'POST'])
+@login_required
+def user_update(id):
+    form = AddUserForm()
+    name_to_update = User.query.get_or_404(id)
+    if request.method == 'POST':
+        name_to_update.username = request.form.get('username')
+        name_to_update.email = request.form.get('email')
+        name_to_update.favorite_color = request.form.get('favorite_color')
+        try:
+            db.session.commit()
+            flash('User Updated Successfully')
+            return render_template('auth/update.html', form=form, name_to_update=name_to_update)
+        except:
+            flash('Error Looks like there was a problem')
+            return render_template('auth/update.html', form=form, name_to_update=name_to_update)
+    else:
+        return render_template('auth/update.html', form=form, name_to_update=name_to_update)
 
 
 @auth_bp.route('/logout')

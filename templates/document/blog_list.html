@@ -7,13 +7,19 @@
 
     {% for post in posts.items %}
     <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-        <ul class="list-group">
-            <h2>{{ post.title }}</h2>
-            <a href="/update/{{post.id}}">Edit</a>
-            <a href="/delete/{{post.id}}">Delete</a>
-            <li class="list-group-item">created at: {{ post.created_at }}</li>
-            <li class="list-group-item"><p>{{ post.body }}</p></li>
-        </ul>
+        <h2>{{ post.title }}</h2>
+        <li class="list-group-item">By: {{ post.author }}</li>
+        <li class="list-group-item">created at: {{ post.created_at }}</li>
+        <li class="list-group-item"><p>{{ post.body }}</p></li>
+        <a href="{{ url_for('Blog.get_blog', id=post.id)}}"
+           class="btn btn-outline-secondary btn-sm"
+        >View Post</a>
+        <a href="{{ url_for('Blog.update_blog', id=post.id)}}"
+           class="btn btn-outline-secondary btn-sm"
+        >Edit Post</a>
+        <a href="{{ url_for('Blog.delete_blog', id=post.id)}}"
+           class="btn btn-outline-danger btn-sm"
+        >Delete Post</a>
     </div>
     {% endfor %}
     {% if posts.has_prev %}

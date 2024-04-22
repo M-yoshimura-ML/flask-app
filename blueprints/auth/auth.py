@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, session, flash
 from passlib.hash import sha256_crypt
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from main import db, login_manager
 from models.users import User
@@ -122,6 +122,14 @@ def user_delete(id):
     except:
         flash("Whoops! There was a problem to delete user.")
         return render_template('auth/add_user.html', form=form, user_to_delete=user_to_delete)
+
+
+def get_current_user():
+    if current_user.is_authenticated:
+        user_id = current_user.id
+        return user_id
+    else:
+        return None
 
 
 @auth_bp.route('/logout')

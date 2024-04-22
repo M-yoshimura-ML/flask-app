@@ -7,7 +7,8 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    author = db.Column(db.String(100))
+    # author = db.Column(db.String(100))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     slug = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.now(pytz.timezone('Asia/Tokyo')))

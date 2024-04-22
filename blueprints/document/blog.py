@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required
 
 from blueprints.auth.auth import get_current_user
-from blueprints.document.post_form import PostForm
+from blueprints.document.post_form import PostForm, SearchForm
 from models.post import Post
 from main import db
 
@@ -93,4 +93,23 @@ def delete_blog(id):
     else:
         flash("you are not authorized to delete post.")
         return redirect(url_for('Blog.get_blog_list'))
+
+
+@blog_bp.context_processor
+def base():
+    form = SearchForm()
+    return dict(form=form)
+
+
+@blog_bp.route("/search", methods=['POST'])
+def search():
+    form = SearchForm()
+    posts = Post.query
+    if form.validate_on_submit():
+        searched = form.searched.data
+        posts = posts.filter(Post.body.like('%' + searched + '%')).order_by(Post.title).all()
+        return render_template("/document/search_blog.html",
+                               form=form,
+                               searched=searched,
+                               posts=posts)
 

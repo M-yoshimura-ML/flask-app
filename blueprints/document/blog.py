@@ -54,6 +54,7 @@ def display_create():
 @login_required
 def update_blog(id):
     post = Post.query.get_or_404(id)
+    user_id = get_current_user()
     form = PostForm()
     if form.validate_on_submit():
         post.title = form.title.data
@@ -64,23 +65,32 @@ def update_blog(id):
         db.session.commit()
         flash("Post has been updated")
         return redirect(url_for('Blog.update_blog', id=post.id))
-    form.title.data = post.title
-    form.author.data = post.author
-    form.slug.data = post.slug
-    form.body.data = post.body
-    return render_template('document/edit_blog.html', id=post.id, form=form)
+    if user_id == post.user_id:
+        form.title.data = post.title
+        form.author.data = post.author
+        form.slug.data = post.slug
+        form.body.data = post.body
+        return render_template('document/edit_blog.html', id=post.id, form=form)
+    else:
+        flash("You are not authorized to edit post.")
+        return redirect(url_for('Blog.get_blog_list'))
 
 
 @blog_bp.route("/delete/<int:id>", methods=['GET'])
 @login_required
 def delete_blog(id):
     post = Post.query.get_or_404(id)
-    try:
-        db.session.delete(post)
-        db.session.commit()
-        flash("Blog post was deleted")
-        return redirect(url_for('Blog.get_blog_list'))
-    except:
-        flash("Whoops there is something wrong for deleting blog.")
+    user_id = get_current_user()
+    if user_id == post.user_id:
+        try:
+            db.session.delete(post)
+            db.session.commit()
+            flash("Blog post was deleted")
+            return redirect(url_for('Blog.get_blog_list'))
+        except:
+            flash("Whoops there is something wrong for deleting blog.")
+            return redirect(url_for('Blog.get_blog_list'))
+    else:
+        flash("you are not authorized to delete post.")
         return redirect(url_for('Blog.get_blog_list'))
 

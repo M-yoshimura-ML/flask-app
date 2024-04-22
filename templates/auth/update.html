@@ -12,24 +12,39 @@
         {% endfor %}
     {% endif %}
     {% endwith %}
-    <form method="POST" action="/user/update/{{ name_to_update.id }}">
-        {{ form.hidden_tag() }}
+    {% if name_to_update.id == current_user.id %}
+        <form method="POST" action="/user/update/{{ name_to_update.id }}">
+            {{ form.hidden_tag() }}
 
+            <div class="mb-5" style="font-size:20px; font-weight:bold; margin-left:10px;">
+                <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+                    {{ form.username.label(class="form-label") }}<br>
+                    {{ form.username(class="form-control", value=name_to_update.username) }}<br>
+
+                    {{ form.email.label(class="form-label") }}<br>
+                    {{ form.email(class="form-control", value=name_to_update.email) }}<br>
+
+                    {{ form.favorite_color.label(class="form-label") }}<br>
+                    {{ form.favorite_color(class="form-control", value=name_to_update.favorite_color) }}<br>
+
+                    {{ form.submit(class="btn btn-primary") }}
+                    <a href="{{ url_for('Auth.user_delete', id=name_to_update.id)}}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </form>
+    {% else %}
         <div class="mb-5" style="font-size:20px; font-weight:bold; margin-left:10px;">
             <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
-                {{ form.username.label(class="form-label") }}<br>
-                {{ form.username(class="form-control", value=name_to_update.username) }}<br>
+                <label for="Username" class="form-label">User Name</label>
+                <input type="text" class="form-control" id="Username" value="{{name_to_update.username}}" disabled>
 
-                {{ form.email.label(class="form-label") }}<br>
-                {{ form.email(class="form-control", value=name_to_update.email) }}<br>
+                <label for="Email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="Email" value="{{name_to_update.email}}" disabled>
 
-                {{ form.favorite_color.label(class="form-label") }}<br>
-                {{ form.favorite_color(class="form-control", value=name_to_update.favorite_color) }}<br>
-
-                {{ form.submit(class="btn btn-primary") }}
-                <a href="{{ url_for('Auth.user_delete', id=name_to_update.id)}}" class="btn btn-danger">Delete</a>
+                <label for="FavoriteColor" class="form-label">Favorite Color</label>
+                <input type="text" class="form-control" id="FavoriteColor" value="{{name_to_update.favorite_color}}" disabled>
             </div>
         </div>
-    </form>
+    {% endif %}
 </body>
 {% endblock %}

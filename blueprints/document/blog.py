@@ -3,6 +3,7 @@ import datetime
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required
 
+from blueprints.auth.auth import get_current_user
 from blueprints.document.post_form import PostForm
 from models.post import Post
 from main import db
@@ -30,11 +31,12 @@ def display_create():
     form = PostForm()
     if request.method == "POST":
         if form.validate_on_submit():
+            user_id = get_current_user()
             title = form.title.data
             content = form.body.data
-            author = form.author.data
+            # author = form.author.data
             slug = form.slug.data
-            post = Post(title=title, body=content, author=author, slug=slug)
+            post = Post(title=title, body=content, user_id=user_id, slug=slug)
             form.title.data = ''
             form.body.data = ''
             form.author.data = ''
@@ -55,7 +57,6 @@ def update_blog(id):
     form = PostForm()
     if form.validate_on_submit():
         post.title = form.title.data
-        post.author = form.author.data
         post.slug = form.slug.data
         post.body = form.body.data
         post.updated_at = datetime.datetime.now()

@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(255), nullable=False, unique=True)
     password_hash = db.Column(db.String(255), nullable=False)
     favorite_color = db.Column(db.String(120))
+    posts = db.relationship('Post', backref='author', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
 
     @property

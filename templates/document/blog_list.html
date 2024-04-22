@@ -2,8 +2,18 @@
 {% block title %}Blog list page{% endblock %}
 {% block content %}
 <div class="container">
-    <h1 class="mt-1">blog page</h1>
+    <h1 class="mt-1">blog List</h1>
     <p><a href="/create_blog">Create new blog</a></p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
 
     {% for post in posts.items %}
     <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
@@ -14,12 +24,14 @@
         <a href="{{ url_for('Blog.get_blog', id=post.id)}}"
            class="btn btn-outline-secondary btn-sm"
         >View Post</a>
-        <a href="{{ url_for('Blog.update_blog', id=post.id)}}"
-           class="btn btn-outline-secondary btn-sm"
-        >Edit Post</a>
-        <a href="{{ url_for('Blog.delete_blog', id=post.id)}}"
-           class="btn btn-outline-danger btn-sm"
-        >Delete Post</a>
+        {% if post.user_id == current_user.id %}
+            <a href="{{ url_for('Blog.update_blog', id=post.id)}}"
+               class="btn btn-outline-secondary btn-sm"
+            >Edit Post</a>
+            <a href="{{ url_for('Blog.delete_blog', id=post.id)}}"
+               class="btn btn-outline-danger btn-sm"
+            >Delete Post</a>
+        {% endif %}
     </div>
     {% endfor %}
     {% if posts.has_prev %}

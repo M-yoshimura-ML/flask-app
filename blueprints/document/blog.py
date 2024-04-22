@@ -95,12 +95,6 @@ def delete_blog(id):
         return redirect(url_for('Blog.get_blog_list'))
 
 
-@blog_bp.context_processor
-def base():
-    form = SearchForm()
-    return dict(form=form)
-
-
 @blog_bp.route("/search", methods=['POST'])
 def search():
     form = SearchForm()

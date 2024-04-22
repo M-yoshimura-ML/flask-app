@@ -1,4 +1,6 @@
 from flask import render_template
+
+from blueprints.document.post_form import SearchForm
 from blueprints.helloworld.helloworld import hello_world_bp
 from blueprints.student.formdata import student_bp
 from blueprints.cookies.cookies import cookies_bp
@@ -34,6 +36,12 @@ app.config['MAIL_USER'] = 'your_email@gmail.com'    # Your Gmail address
 app.config['MAIL_PASSWORD'] = 'your_app_password'   # Generated app password
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
+
+
+@app.context_processor
+def inject_search_form():
+    form = SearchForm()
+    return dict(form=form)
 
 
 # Invalid URL

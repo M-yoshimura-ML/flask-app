@@ -1,14 +1,8 @@
 <!-- templates/index.html -->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Search</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Blog list page{% endblock %}
+{% block content %}
     <div class="container mt-5">
         <h1>Image Search</h1>
         <form action="/search" method="GET">
@@ -39,5 +33,4 @@
             </div>
         {% endif %}
     </div>
-</body>
-</html>
+{% endblock %}

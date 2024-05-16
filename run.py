@@ -30,13 +30,6 @@ app.register_blueprint(blog_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(search_image_bp)
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USER'] = 'your_email@gmail.com'    # Your Gmail address
-app.config['MAIL_PASSWORD'] = 'your_app_password'   # Generated app password
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-
 
 @app.context_processor
 def inject_search_form():
@@ -55,8 +48,18 @@ def page_not_found(e):
     return render_template("errors/500.html"), 500
 
 
+@app.route("/test")
+def test_func():
+    name = 'masa'
+    posts = [
+        {'title': 'test1', 'author': 'masa'},
+        {'title': 'test2', 'author': 'john'}
+    ]
+    return render_template("test.html", name=name, posts=posts)
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
 
 
 

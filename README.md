@@ -15,7 +15,7 @@
     - `"flask-login"`
 
 - SQLAlchemy ORMapping:
-    - `flask-aqlalchemy` 
+    - `flask-sqlalchemy` 
 
 - Bootstrap Styling:
     - `flask-bootstrap`

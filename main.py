@@ -1,5 +1,3 @@
-import os
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -20,8 +18,7 @@ def create_app():
     app = Flask(__name__)
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@localhost:port/db_name'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:password!admin@localhost:3360/flask_app'
-    app.config['SECRET_KEY'] = os.urandom(24)
+    app.config.from_object("config.DevConfig")
     db.init_app(app)
     migrate.init_app(app, db)
 

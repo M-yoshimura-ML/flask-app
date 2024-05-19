@@ -6,7 +6,7 @@ from flask_login import login_required
 from blueprints.auth.auth import get_current_user
 from blueprints.document.post_form import PostForm, SearchForm
 from models.post import Post
-from main import db
+from main import db # , images
 
 blog_bp = Blueprint('Blog', __name__, template_folder="templates")
 
@@ -31,6 +31,9 @@ def display_create():
     form = PostForm()
     if request.method == "POST":
         if form.validate_on_submit():
+            # filename = None
+            # if form.image.data:
+            #     filename = images.save(form.image.data)
             user_id = get_current_user()
             title = form.title.data
             content = form.body.data

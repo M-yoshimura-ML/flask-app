@@ -35,10 +35,10 @@
     </div>
     {% endfor %}
     {% if posts.has_prev %}
-        <a href="{{ url_for('Blog.display_document', page=posts.prev_num) }}">Previous</a>
+        <a href="{{ url_for('Blog.get_blog_list', page=posts.prev_num) }}">Previous</a>
     {% endif %}
     {% if posts.has_next %}
-        <a href="{{ url_for('Blog.display_document', page=posts.next_num) }}">Next</a>
+        <a href="{{ url_for('Blog.get_blog_list', page=posts.next_num) }}">Next</a>
     {% endif %}
 </div>
 {% endblock %}

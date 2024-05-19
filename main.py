@@ -5,6 +5,7 @@ from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
 from flask_ckeditor import CKEditor
+# from flask_uploads import UploadSet, IMAGES, configure_uploads
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -12,6 +13,7 @@ login_manager = LoginManager()
 bootstrap = Bootstrap()
 mail = Mail()
 ckeditor = CKEditor()
+# images = UploadSet('images', IMAGES)
 
 
 def create_app():
@@ -26,6 +28,7 @@ def create_app():
     bootstrap.init_app(app)
     mail.init_app(app)
     ckeditor.init_app(app)
+    # configure_uploads(app, images)
     with app.app_context():
         db.create_all()
     return app

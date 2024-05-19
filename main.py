@@ -30,6 +30,7 @@ def create_app():
     ckeditor.init_app(app)
     # configure_uploads(app, images)
     with app.app_context():
+        from models import User, Role, Post
         db.create_all()
     return app
 

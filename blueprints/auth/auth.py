@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, session, flash
+from flask import Blueprint, request, render_template, redirect, session, flash, url_for
 from passlib.hash import sha256_crypt
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -57,9 +57,18 @@ def login():
         return render_template('auth/login.html', form=form)
 
 
+def admin_check():
+    if current_user.role.name != 'admin':
+        flash('You do not have permission to access this page.', 'danger')
+        return redirect(url_for('Auth.dashboard'))
+
+
 @auth_bp.route('/user/add', methods=['GET', 'POST'])
 @login_required
 def add_user():
+    check_result = admin_check()
+    if check_result:
+        return check_result
     form = AddUserForm()
     if request.method == 'POST':
         if form.validate_on_submit():

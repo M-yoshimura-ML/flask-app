@@ -21,6 +21,7 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='author', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False, default=2)
+    role = db.relationship('Role', backref=db.backref('users', lazy=True))
 
     @property
     def password(self):

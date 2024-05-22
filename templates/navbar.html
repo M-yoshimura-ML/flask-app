@@ -22,9 +22,11 @@
           <a class="nav-link" href="{{ url_for('SearchImage.index') }}">Search images</a>
         </li>
         {% if current_user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('Auth.add_user') }}">Add User</a>
-          </li>
+          {% if current_user.role.name == 'admin' %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('Auth.add_user') }}">Add User</a>
+            </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('Auth.logout') }}">logout</a>
           </li>

@@ -13,7 +13,7 @@
     {% endif %}
     {% endwith %}
     {% if name_to_update.id == current_user.id %}
-        <form method="POST" action="/user/update/{{ name_to_update.id }}">
+        <form method="POST" action="/user/update/{{ name_to_update.id }}" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
 
             <div class="mb-5" style="font-size:20px; font-weight:bold; margin-left:10px;">
@@ -26,9 +26,18 @@
 
                     {{ form.favorite_color.label(class="form-label") }}<br>
                     {{ form.favorite_color(class="form-control", value=name_to_update.favorite_color) }}<br>
+                    {{ form.profile_pic.label(class="form-label") }}
+                    {{ form.profile_pic(class="form-control", value=name_to_update.profile_pic) }}<br>
 
                     {{ form.submit(class="btn btn-primary") }}
                     <a href="{{ url_for('Auth.user_delete', id=name_to_update.id)}}" class="btn btn-danger">Delete</a>
+                </div>
+                <div class="col-4">
+                    {% if current_user.profile_pic %}
+                    <img src="{{ url_for('static', filename='images/uploads/' + current_user.profile_pic)}}" width="200" align="right">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/cat-image.png')}}" width="200" align="right">
+                    {% endif %}
                 </div>
             </div>
         </form>

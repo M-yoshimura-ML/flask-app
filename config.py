@@ -11,7 +11,7 @@ class Config(object):
 
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://username:password@localhost:port/db_name"
 
-    UPLOADS = "/home/username/app/statistics/images/uploads"
+    UPLOAD_FOLDER = "static/images/uploads"
     UPLOADED_IMAGES_DEST = os.path.join('uploads/images')
 
 

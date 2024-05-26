@@ -4,7 +4,12 @@ from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from main import db, login_manager
 from models.users import User
-from blueprints.auth.AddUserForm import AddUserForm, LoginForm
+from blueprints.auth.AddUserForm import AddUserForm, LoginForm, UpdateUserForm
+from werkzeug.utils import secure_filename
+import uuid as uuid
+import os
+from config import Config
+
 
 auth_bp = Blueprint('Auth', __name__, template_folder="templates")
 
@@ -101,12 +106,24 @@ def add_user():
 @auth_bp.route('/user/update/<int:id>', methods=['GET', 'POST'])
 @login_required
 def user_update(id):
-    form = AddUserForm()
+    form = UpdateUserForm()
     name_to_update = User.query.get_or_404(id)
     if request.method == 'POST':
         name_to_update.username = request.form.get('username')
         name_to_update.email = request.form.get('email')
         name_to_update.favorite_color = request.form.get('favorite_color')
+
+        # check for profile pic
+        if request.files['profile_pic']:
+            name_to_update.profile_pic = request.files['profile_pic']
+            # grab image name
+            pic_filename = secure_filename(name_to_update.profile_pic.filename)
+            # set UUiD
+            pic_name = str(uuid.uuid1()) + '_' + pic_filename
+            # save image
+            name_to_update.profile_pic.save(os.path.join(Config.UPLOAD_FOLDER, pic_name))
+            # change it to a string to save to db
+            name_to_update.profile_pic = pic_name
         try:
             db.session.commit()
             flash('User Updated Successfully')

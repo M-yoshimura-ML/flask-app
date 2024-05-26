@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Create new blog page{% endblock %}
+{% block styles %}
+<style type="text/css">
+    .ck-editor__editable_inline {
+        height: 450px
+    }
+</style>
+{% endblock %}
 {% block content %}
 <div class="container">
     <h1 class="mt-1">Create New Blog</h1>
@@ -14,7 +21,7 @@
         {% endfor %}
     {% endif %}
     {% endwith %}
-    <form action="/create_blog" method="POST">
+    <form action="/create_blog" method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
         {{ form.title.label(class="form-label") }}<br>
@@ -26,13 +33,28 @@
         {{ form.slug.label(class="form-label") }}<br>
         {{ form.slug(class="form-control") }}<br>
 
-        {{ form.body.label(class="form-label") }}<br>
-        {{ form.body(class="form-control", rows="10") }}<br>
+
+        <label class="form-label">content</label>
+        <textarea class="form-control" id="content" name="content"></textarea>
 
         {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
-    {{ ckeditor.load() }}
-    {{ ckeditor.config(name='body') }}
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#content' ),{
+                ckfinder: {
+                    uploadUrl: '{{ url_for("Blog.upload") }}'
+                }
+            })
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
+
+
 </div>
 {% endblock %}

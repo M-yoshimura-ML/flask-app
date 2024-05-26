@@ -1,12 +1,16 @@
 import datetime
 
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_required
+from werkzeug.utils import secure_filename
+import os
+import json
 
 from blueprints.auth.auth import get_current_user
 from blueprints.document.post_form import PostForm, SearchForm
 from models.post import Post
-from main import db # , images
+from main import db
+from config import Config
 
 blog_bp = Blueprint('Blog', __name__, template_folder="templates")
 
@@ -29,28 +33,22 @@ def get_blog(id):
 @login_required
 def display_create():
     form = PostForm()
-    if request.method == "POST":
-        if form.validate_on_submit():
-            # filename = None
-            # if form.image.data:
-            #     filename = images.save(form.image.data)
-            user_id = get_current_user()
-            title = form.title.data
-            content = form.body.data
-            # author = form.author.data
-            slug = form.slug.data
-            post = Post(title=title, body=content, user_id=user_id, slug=slug)
-            form.title.data = ''
-            form.body.data = ''
-            form.author.data = ''
-            form.slug.data = ''
-            db.session.add(post)
-            db.session.commit()
+    if form.validate_on_submit():
+        user_id = get_current_user()
+        title = form.title.data
+        content = form.content.data
+        # author = form.author.data
+        slug = form.slug.data
+        post = Post(title=title, body=content, user_id=user_id, slug=slug)
+        form.title.data = ''
+        form.content.data = ''
+        form.author.data = ''
+        form.slug.data = ''
+        db.session.add(post)
+        db.session.commit()
 
-            flash("Blog Post submitted successfully.")
-        return render_template('document/create_blog.html', form=form)
-    else:
-        return render_template('document/create_blog.html', form=form)
+        flash("Blog Post submitted successfully.")
+    return render_template('document/create_blog.html', form=form)
 
 
 @blog_bp.route("/update/<int:id>", methods=['GET', 'POST'])
@@ -62,7 +60,7 @@ def update_blog(id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.slug = form.slug.data
-        post.body = form.body.data
+        post.body = form.content.data
         post.updated_at = datetime.datetime.now()
         db.session.add(post)
         db.session.commit()
@@ -72,7 +70,7 @@ def update_blog(id):
         form.title.data = post.title
         form.author.data = post.author
         form.slug.data = post.slug
-        form.body.data = post.body
+        form.content.data = post.body
         return render_template('document/edit_blog.html', id=post.id, form=form)
     else:
         flash("You are not authorized to edit post.")
@@ -110,3 +108,14 @@ def search():
                                searched=searched,
                                posts=posts)
 
+
+@blog_bp.route('/upload', methods=['POST'])
+def upload():
+    f = request.files.get('upload')
+    if f:
+        filename = secure_filename(f.filename)
+        filepath = os.path.join(Config.UPLOAD_FOLDER, filename)
+        f.save(filepath)
+        url = url_for('static', filename='images/uploads/' + filename)
+        return jsonify({"uploaded": 1, "fileName": filename, "url": url})
+    return jsonify({"uploaded": 0, "error": {"message": "Upload failed"}})

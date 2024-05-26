@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Edit blog{% endblock %}
+{% block styles %}
+<style type="text/css">
+    .ck-editor__editable_inline {
+        height: 450px
+    }
+</style>
+{% endblock %}
 {% block content %}
 <div class="container">
     <h1 class="mt-1">Edit Blog</h1>
@@ -26,13 +33,25 @@
         {{ form.slug.label(class="form-label") }}<br>
         {{ form.slug(class="form-control") }}<br>
 
-        {{ form.body.label(class="form-label") }}<br>
-        {{ form.body(class="form-control", rows="10") }}<br>
+        {{ form.content.label(class="form-label") }}<br>
+        {{ form.content(class="form-control", rows="10") }}<br>
 
         {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
-    {{ ckeditor.load() }}
-    {{ ckeditor.config(name='body') }}
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#content' ),{
+                ckfinder: {
+                    uploadUrl: '{{ url_for("Blog.upload") }}'
+                }
+            })
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
 </div>
 {% endblock %}
